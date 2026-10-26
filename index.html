@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Programme de récompenses</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <main class="container">
+        <header>
+            <h1>Programme de récompenses</h1>
+            <p>Bienvenue sur notre plateforme promotionnelle.</p>
+        </header>
+
+        <section class="card">
+            <h2>Découvrez nos offres</h2>
+
+            <p>
+                Consultez les promotions disponibles et
+                découvrez les conditions de participation.
+            </p>
+
+            <button id="offersButton">
+                Découvrir les offres
+            </button>
+
+            <p id="message" role="status"></p>
+        </section>
+
+        <footer>
+            <p>
+                Consultez les conditions officielles de chaque
+                promotion avant de participer.
+            </p>
+        </footer>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}">
+    </script>
+</body>
+</
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f5f8;
+    color: #252525;
+}
+
+.container {
+    width: 100%;
+    max-width: 520px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+header h1 {
+    font-size: 28px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+}
+
+.card h2 {
+    margin-top: 0;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    margin-top: 15px;
+    border: none;
+    border-radius: 8px;
+    background: #1769e0;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1054b8;
+}
+
+#message {
+    margin-top: 18px;
+    line-height: 1.5;
+}
+
+footer {
+    margin-top: 25px;
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+}
+
+@media (max-width: 600px) {
+    .container {
+        margin: 15px auto;
+    }
+
+    .card {
+        padding: 22px;
+    }
+}
+  document.addEventListener("DOMContentLoaded", () => {
+    const button = document.getElementById("offersButton");
+    const message = document.getElementById("message");
+
+    button.addEventListener("click", async () => {
+        button.disabled = true;
+        message.textContent = "Chargement des offres...";
+
+        try {
+            const response = await fetch("/api/promotion");
+
+            if (!response.ok) {
+                throw new Error("Erreur du serveur");
+            }
+
+            const data = await response.json();
+
+            message.textContent = data.message;
+        } catch (error) {
+            message.textContent =
+                "Impossible de charger les offres. Réessayez.";
+        } finally {
+            button.disabled = false;
+        }
+    });
+}); 
